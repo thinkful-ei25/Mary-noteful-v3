@@ -8,14 +8,17 @@ const mongoose = require('mongoose');
 const app = require('../server');
 const { TEST_MONGODB_URI } = require('../config');
 const Note = require('../models/note');
-const { notes } = require('../db/seed/notes');
+const { notes } = require('../db/seed/data');
 const expect = chai.expect;
 chai.use(chaiHttp);
 
 describe('Testing Noteful API - Notes', function () {
     before(function () { //connects to the test dummyDatabase
-        return mongoose.connect(TEST_MONGODB_URI)
-            .then(() => mongoose.connection.db.dropDatabase());
+        return mongoose.createConnection(TEST_MONGODB_URI)
+            .then(() => mongoose.connection.db.dropDatabase())
+            .catch(err => {
+                console.log(err)
+            });
     });
 
     beforeEach(function () { //seeds the dummyData from notes

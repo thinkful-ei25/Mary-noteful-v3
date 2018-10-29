@@ -1,3 +1,4 @@
+'use strict'
 const mongoose = require('mongoose');
 
 const noteSchema = new mongoose.Schema({
@@ -5,8 +6,17 @@ const noteSchema = new mongoose.Schema({
         type: String, required: true
     },
     content: String,
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: Date
+    folder_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Folder' },
+    tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }]
+});
+
+noteSchema.set('toJSON', {
+    virtuals: true,
+    transform: (doc, ret) => {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.__v;
+    }
 });
 
 noteSchema.set('timestamps', true);

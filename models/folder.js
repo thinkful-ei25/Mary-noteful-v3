@@ -1,0 +1,21 @@
+'use strict'
+const mongoose = require('mongoose');
+
+const folderSchema = new mongoose.Schema({
+    name: {
+        type: String, required: true, unique: true
+    },
+});
+
+folderSchema.set('toJSON', {
+    virtuals: true,
+    transform: (doc, ret) => {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.__v;
+    }
+});
+folderSchema.set('timestamps', true);
+
+const folderModel = mongoose.model('Folder', folderSchema);
+module.exports = folderModel;
